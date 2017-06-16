@@ -342,20 +342,30 @@ class CloudMlClient(object):
     else:
       return response.content
 
-  def get_model_service_logs(self, model_name, model_version, org_id=None):
+  def get_model_service_logs(self, model_name, model_version, org_id=None, replica_index=None):
     """Get logs of the model service.
 
     Args:
       model_name: The name of the model service.
       model_version: The version of the model service.
+      org_id: the client's orgid
+      replica_index: the replica's index, 
 
     Returns:
       The logs of the model service.
     """
     if org_id:
-      url = self._model_url + "/" + model_name + "/" + model_version + "/logs" + "?org_id=" + org_id
+      if replica_index:
+        url = self._model_url + "/" + model_name + "/" + model_version + "/logs" + "?org_id=" + org_id + \
+              "&replica=" + replica_index
+      else:
+        url = self._model_url + "/" + model_name + "/" + model_version + "/logs" + "?org_id=" + org_id
     else:
-      url = self._model_url + "/" + model_name + "/" + model_version + "/logs"
+      if replica_index:
+        url = self._model_url + "/" + model_name + "/" + model_version + "/logs" + "?replica=" + replica_index
+      else:
+        url = self._model_url + "/" + model_name + "/" + model_version + "/logs"
+
     response = requests.get(url, auth=self._auth)
     if response.ok:
       return json.loads(response.content.decode("utf-8"))

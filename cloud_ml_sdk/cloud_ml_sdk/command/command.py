@@ -298,6 +298,12 @@ def main():
   models_logs_parser.add_argument("model_name", help="The name of the model")
   models_logs_parser.add_argument(
       "model_version", help="The version of the model")
+  models_logs_parser.add_argument(
+      "-ri",
+      "--replica",
+      dest="replica_index",
+      help="The replica index"
+  )
   models_logs_parser.set_defaults(func=util.get_model_logs)
 
   # subcommand of models: metrics
