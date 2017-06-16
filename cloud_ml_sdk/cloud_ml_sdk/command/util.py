@@ -776,13 +776,20 @@ def get_model_logs(args):
 
   client = CloudMlClient()
   if "org_id" in args:
-    response = client.get_model_service_logs(args.model_name, args.model_version, args.org_id)
+    if args.replica_index:
+      response = client.get_model_service_logs(args.model_name, args.model_version, args.org_id, args.replica_index)
+    else:
+      response = client.get_model_service_logs(args.model_name, args.model_version, args.org_id)
   else:
-    response = client.get_model_service_logs(args.model_name, args.model_version)
+    if args.replica_index:
+      response = client.get_model_service_logs(args.model_name, args.model_version, replica_index=args.replica_index)
+    else:
+      response = client.get_model_service_logs(args.model_name, args.model_version)
   if not isinstance(response, str):
-    print(response["logs"])
-  else:
-    print("response: {}".format(response))
+    if "error" in response:
+      print(response['message'])
+    else:
+      print(response["logs"])
 
 
 def get_model_metrics(args):
