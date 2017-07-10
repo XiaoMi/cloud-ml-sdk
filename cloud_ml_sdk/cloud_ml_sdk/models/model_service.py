@@ -133,8 +133,8 @@ class ModelService(object):
   @gpu_limit.setter
   def gpu_limit(self, value):
     if value != None:
-      if not (isinstance(value, int) and value > 0):
-        raise ValueError("gpu_limit must be a postive integer!")
+      if not (isinstance(value, int) and value >= 0):
+        raise ValueError("gpu_limit must be a nonnegative integer!")
     self._gpu_limit = value
 
   @property
